@@ -54,7 +54,6 @@ Requires Node.js 20+.
 
 ```bash
 npm install
-cp .env.example .env.local        # then paste your GOOGLE_GENERATIVE_AI_API_KEY
 npm run dev
 ```
 
@@ -81,7 +80,6 @@ Exact scores vary slightly by model version.
 
 1. Push this folder to a GitHub repo.
 2. In Vercel: **Add New → Project → import the repo** (framework auto-detects as Next.js).
-3. Add environment variable `GOOGLE_GENERATIVE_AI_API_KEY`.
 4. **Deploy.**
 
 ---
