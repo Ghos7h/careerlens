@@ -40,9 +40,8 @@ Embeddings capture meaning ("built dispatch dashboards" ≈ "freight planner UI"
 
 | Need | Service | Free tier | Notes |
 |---|---|---|---|
-| LLM + embeddings | **Google Gemini API** via `@ai-sdk/google` | Free, no credit card | Key from <https://aistudio.google.com/apikey> |
+| LLM + embeddings | **Google Gemini API** via `@ai-sdk/google` | Free, no credit card | NA|
 | Vector DB | **In-memory** (default) | n/a | Zero setup. Rebuilt on cold start (one API call) |
-| Vector DB (persistent) | **Upstash Vector** | 10k vectors, free | Optional. Create index with **768 dimensions, COSINE** |
 | Hosting | **Vercel Hobby** | Free | Deploy straight from GitHub |
 
 > **Privacy note:** Google's free Gemini tier may use submitted content to improve its products. Fine for a POC with sample data. For real candidate data, use a paid tier or another provider (swap one line in `lib/ai.ts` thanks to the AI SDK).
@@ -85,13 +84,6 @@ Exact scores vary slightly by model version.
 3. Add environment variable `GOOGLE_GENERATIVE_AI_API_KEY`.
 4. **Deploy.**
 
-### Optional: persistent vector DB (Upstash)
-
-1. In Vercel: **Storage / Marketplace → Upstash Vector → Create** (free plan). Choose **768 dimensions** and **COSINE** (no built-in embedding model; we bring our own).
-2. Connect it to your project. Vercel adds `UPSTASH_VECTOR_REST_URL` and `UPSTASH_VECTOR_REST_TOKEN` automatically.
-3. Redeploy. The first request fills the index; later cold starts skip embedding jobs.
-4. After editing `data/jobs.json`, run `npm run reindex` locally (with the same Upstash vars in `.env.local`).
-
 ---
 
 ## Project structure
@@ -125,12 +117,3 @@ scripts/reindex.ts       Re-embed jobs into Upstash
 - **Free Gemini quotas** are low; heavy use returns a friendly "try again in a minute" message.
 - Jobs are a static JSON file. Next step: load from your ATS or CMS and re-embed on change.
 - Ideas: filters (location, remote), "save my matches", email capture, evaluation set to tune scoring weights.
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| "server is missing GOOGLE_GENERATIVE_AI_API_KEY" | Add it to `.env.local` and restart `npm run dev` |
-| 429 / quota message | Free tier limit. Wait a minute |
-| Upstash dimension error | Index must be **768** dimensions (matches `EMBED_DIMENSIONS` in `lib/ai.ts`) |
-| Type errors after upgrading `ai` | This project targets AI SDK **v5** (`ai@^5`, `@ai-sdk/google@^2`). In v6+, the embedding model helper is renamed, so adjust `lib/ai.ts` |
