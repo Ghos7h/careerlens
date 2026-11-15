@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-paper font-body text-ink antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid #0e7c86;
+  outline-offset: 2px;
+}
+
+/* The one moment of motion: fit bars grow in when results arrive. */
+@keyframes grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.bar-grow {
+  transform-origin: left;
+  animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow { animation: none; }
+}
